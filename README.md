@@ -13,6 +13,7 @@
 - 🏯 日本語古典籍に特化したレイアウト解析
 - 🚀 ONNX Runtime Webによるブラウザ上での推論
 - 📦 軽量で統合が容易（約6KB）
+- 📘 TypeScript完全対応
 - 🎯 5種類の領域を検出：
   - 全体（1_overall）
   - 手書き（2_handwritten）
@@ -82,6 +83,43 @@ const canvas = document.getElementById('output-canvas')
 drawDetections(canvas, img, detections)
 
 console.log('検出された領域:', detections)
+```
+
+#### TypeScript
+
+TypeScriptで使用する場合、完全な型定義が利用できます：
+
+```typescript
+import {
+  loadModel,
+  preprocess,
+  runInference,
+  postprocess,
+  drawDetections,
+  type Detection,
+  type PreprocessResult,
+  type ClassDefinition
+} from 'koten-layout-detector'
+import type { InferenceSession } from 'onnxruntime-web'
+
+const MODEL_URL = 'https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@v1.1.0/models/best.onnx'
+
+// 型安全な推論
+const session: InferenceSession = await loadModel(MODEL_URL)
+
+const img = new Image()
+img.src = '/path/to/classical-document.jpg'
+await img.decode()
+
+const { tensor, meta }: PreprocessResult = preprocess(img)
+const outputTensor = await runInference(session, tensor)
+const detections: Detection[] = postprocess(outputTensor, meta, 0.5, 0.45)
+
+// 型チェックされた検出結果
+detections.forEach((det: Detection) => {
+  console.log(`検出: ${det.label} (信頼度: ${(det.conf * 100).toFixed(1)}%)`)
+  console.log(`位置: (${det.x1}, ${det.y1}) - (${det.x2}, ${det.y2})`)
+})
 ```
 
 ### API リファレンス
@@ -163,6 +201,7 @@ Japanese classical document layout analysis library using ONNX Runtime for detec
 - 🏯 Specialized for Japanese classical documents (古典籍)
 - 🚀 Browser-based inference using ONNX Runtime Web
 - 📦 Lightweight and easy to integrate
+- 📘 Full TypeScript support
 - 🎯 Detects 5 types of regions:
   - Overall layout (全体)
   - Handwritten text (手書き)
@@ -232,6 +271,43 @@ const canvas = document.getElementById('output-canvas')
 drawDetections(canvas, img, detections)
 
 console.log('Detected regions:', detections)
+```
+
+#### TypeScript
+
+Full TypeScript type definitions are available:
+
+```typescript
+import {
+  loadModel,
+  preprocess,
+  runInference,
+  postprocess,
+  drawDetections,
+  type Detection,
+  type PreprocessResult,
+  type ClassDefinition
+} from 'koten-layout-detector'
+import type { InferenceSession } from 'onnxruntime-web'
+
+const MODEL_URL = 'https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@v1.1.0/models/best.onnx'
+
+// Type-safe inference
+const session: InferenceSession = await loadModel(MODEL_URL)
+
+const img = new Image()
+img.src = '/path/to/classical-document.jpg'
+await img.decode()
+
+const { tensor, meta }: PreprocessResult = preprocess(img)
+const outputTensor = await runInference(session, tensor)
+const detections: Detection[] = postprocess(outputTensor, meta, 0.5, 0.45)
+
+// Type-checked detection results
+detections.forEach((det: Detection) => {
+  console.log(`Detected: ${det.label} (confidence: ${(det.conf * 100).toFixed(1)}%)`)
+  console.log(`Position: (${det.x1}, ${det.y1}) - (${det.x2}, ${det.y2})`)
+})
 ```
 
 ### API Reference
