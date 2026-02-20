@@ -33,16 +33,16 @@ npm install koten-layout-detector onnxruntime-web
 
 ### モデルのダウンロード
 
-事前学習済みONNXモデルはjsDelivr CDN経由で利用可能です：
+事前学習済みONNXモデルはGitHub Releases経由で利用可能です：
 
 ```
-https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@v1.0.0/models/best.onnx
+https://github.com/yuta1984/koten-layout-detector/releases/download/v1.1.0/best.onnx
 ```
 
 最新バージョンを使用する場合：
 
 ```
-https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@latest/models/best.onnx
+https://github.com/yuta1984/koten-layout-detector/releases/latest/download/best.onnx
 ```
 
 モデルサイズ：約36MB
@@ -60,8 +60,8 @@ import {
   COLORS
 } from 'koten-layout-detector'
 
-// CDNからONNXモデルをロード
-const MODEL_URL = 'https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@v1.0.0/models/best.onnx'
+// GitHub ReleasesからONNXモデルをロード
+const MODEL_URL = 'https://github.com/yuta1984/koten-layout-detector/releases/download/v1.1.0/best.onnx'
 const session = await loadModel(MODEL_URL)
 
 // 画像を読み込む
@@ -102,7 +102,7 @@ import {
 } from 'koten-layout-detector'
 import type { InferenceSession } from 'onnxruntime-web'
 
-const MODEL_URL = 'https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@v1.1.0/models/best.onnx'
+const MODEL_URL = 'https://github.com/yuta1984/koten-layout-detector/releases/download/v1.1.0/best.onnx'
 
 // 型安全な推論
 const session: InferenceSession = await loadModel(MODEL_URL)
@@ -175,7 +175,7 @@ ID、キー、日本語ラベルを含むクラス定義の配列。
 
 検出モデルはYOLOv12ベースで、日本語古典籍の解析に最適化されています。
 
-事前学習済みモデルはCDN経由で利用可能です（上記の[モデルのダウンロード](#モデルのダウンロード)セクションを参照）。モデルはnpmパッケージとは別に配布され、パッケージサイズを軽量に保っています。
+事前学習済みモデルはGitHub Releases経由で利用可能です（上記の[モデルのダウンロード](#モデルのダウンロード)セクションを参照）。モデルはnpmパッケージとは別に配布され、パッケージサイズを軽量に保っています。
 
 ### ライセンス
 
@@ -221,16 +221,16 @@ npm install koten-layout-detector onnxruntime-web
 
 ### Model Download
 
-The pre-trained ONNX model is available via jsDelivr CDN:
+The pre-trained ONNX model is available via GitHub Releases:
 
 ```
-https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@v1.0.0/models/best.onnx
+https://github.com/yuta1984/koten-layout-detector/releases/download/v1.1.0/best.onnx
 ```
 
 Or use the latest version:
 
 ```
-https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@latest/models/best.onnx
+https://github.com/yuta1984/koten-layout-detector/releases/latest/download/best.onnx
 ```
 
 Model size: ~36MB
@@ -248,8 +248,8 @@ import {
   COLORS
 } from 'koten-layout-detector'
 
-// Load the ONNX model from CDN
-const MODEL_URL = 'https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@v1.0.0/models/best.onnx'
+// Load the ONNX model from GitHub Releases
+const MODEL_URL = 'https://github.com/yuta1984/koten-layout-detector/releases/download/v1.1.0/best.onnx'
 const session = await loadModel(MODEL_URL)
 
 // Load an image
@@ -290,7 +290,7 @@ import {
 } from 'koten-layout-detector'
 import type { InferenceSession } from 'onnxruntime-web'
 
-const MODEL_URL = 'https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@v1.1.0/models/best.onnx'
+const MODEL_URL = 'https://github.com/yuta1984/koten-layout-detector/releases/download/v1.1.0/best.onnx'
 
 // Type-safe inference
 const session: InferenceSession = await loadModel(MODEL_URL)
@@ -363,7 +363,7 @@ This model is trained on the [NDL-DocL Layout Dataset](https://github.com/ndl-la
 
 The detection model is based on YOLOv12, optimized for classical Japanese document analysis.
 
-The pre-trained model is available via CDN (see [Model Download](#model-download) section above). The model is distributed separately from the npm package to keep the package lightweight.
+The pre-trained model is available via GitHub Releases (see [Model Download](#model-download) section above). The model is distributed separately from the npm package to keep the package lightweight.
 
 ### License
 
