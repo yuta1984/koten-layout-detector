@@ -21,12 +21,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/koten-layout-detector.git"
+    "url": "https://github.com/yuta1984/koten-layout-detector.git"
   },
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/koten-layout-detector/issues"
+    "url": "https://github.com/yuta1984/koten-layout-detector/issues"
   },
-  "homepage": "https://github.com/YOUR_USERNAME/koten-layout-detector#readme",
+  "homepage": "https://github.com/yuta1984/koten-layout-detector#readme",
   "peerDependencies": {
     "onnxruntime-web": "^1.20.0"
   },
