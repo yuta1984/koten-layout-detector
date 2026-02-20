@@ -24,6 +24,22 @@ Check out the live demo at [https://koten-layout.netlify.app/](https://koten-lay
 npm install koten-layout-detector onnxruntime-web
 ```
 
+## Model Download
+
+The pre-trained ONNX model is available via jsDelivr CDN:
+
+```
+https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@v1.0.0/models/best.onnx
+```
+
+Or use the latest version:
+
+```
+https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@latest/models/best.onnx
+```
+
+Model size: ~36MB
+
 ## Usage
 
 ```javascript
@@ -37,8 +53,9 @@ import {
   COLORS
 } from 'koten-layout-detector'
 
-// Load the ONNX model
-const session = await loadModel('/path/to/your/model.onnx')
+// Load the ONNX model from CDN
+const MODEL_URL = 'https://cdn.jsdelivr.net/gh/yuta1984/koten-layout-detector@v1.0.0/models/best.onnx'
+const session = await loadModel(MODEL_URL)
 
 // Load an image
 const img = new Image()
@@ -114,7 +131,7 @@ This model is trained on the [NDL-DocL Layout Dataset](https://github.com/ndl-la
 
 The detection model is based on YOLOv12, optimized for classical Japanese document analysis.
 
-**Note:** You need to provide your own trained ONNX model file. This library provides the inference pipeline but does not include the model weights.
+The pre-trained model is available via CDN (see [Model Download](#model-download) section above). The model is distributed separately from the npm package to keep the package lightweight.
 
 ## License
 
