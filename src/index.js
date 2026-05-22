@@ -17,3 +17,11 @@ export {
 } from './inference.js'
 
 export { iou, nms } from './nms.js'
+
+export {
+  deskew,
+  deskewImage,
+  estimateSkewAngle,
+  estimateSkewFromInk,
+  scoreAngle
+} from './deskew.js'

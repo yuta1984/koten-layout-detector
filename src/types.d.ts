@@ -63,12 +63,64 @@ export const COLORS: string[]
  */
 export function loadModel(modelUrl: string): Promise<InferenceSession>
 
+/** Anything drawable to a canvas with width/height (image / canvas / bitmap) */
+export type ImageSource = HTMLImageElement | HTMLCanvasElement | ImageBitmap
+
 /**
- * Preprocesses an image for inference with letterbox resizing
- * @param img - HTML image element to preprocess
+ * Preprocesses an image for inference with letterbox resizing.
+ * Also accepts a deskewed canvas (see `deskew`).
+ * @param img - image / canvas / bitmap to preprocess
  * @returns Preprocessed tensor and metadata
  */
-export function preprocess(img: HTMLImageElement): PreprocessResult
+export function preprocess(img: ImageSource): PreprocessResult
+
+/** Region in original-image coordinates */
+export interface Region { x1: number; y1: number; x2: number; y2: number }
+
+/** Options for skew estimation / deskew */
+export interface DeskewOptions {
+  /** downscale longest side to this many px for estimation (default 600) */
+  maxDim?: number
+  /** restrict estimation to this region (e.g. a detected text region) */
+  region?: Region
+  /** search range ±deg (default 10) */
+  maxAngle?: number
+  /** coarse search step in deg (default 1) */
+  coarseStep?: number
+  /** fine search step in deg (default 0.2) */
+  fineStep?: number
+  /** fill color for the rotated canvas margins (default '#ffffff') */
+  background?: string
+  /** skip correction when |angle| below this (default 0.3) */
+  minAngle?: number
+}
+
+/**
+ * Estimate the skew angle [deg] of a vertical-text page.
+ * The returned angle straightens the page when passed to `ctx.rotate(angle*PI/180)`.
+ */
+export function estimateSkewAngle(source: ImageSource, opts?: DeskewOptions): number
+
+/** Rotate the source by angleDeg and return a deskewed canvas (margins padded). */
+export function deskewImage(source: ImageSource, angleDeg: number, opts?: { background?: string }): HTMLCanvasElement
+
+/**
+ * Estimate + correct in one call. Returns the (possibly unchanged) source and the
+ * applied angle. Detections from `preprocess(result.canvas)` are in deskewed coords.
+ */
+export function deskew(source: ImageSource, opts?: DeskewOptions): { canvas: ImageSource; angle: number }
+
+/** Pure core: estimate skew [deg] from ink pixel coordinates/weights (DOM-free, testable). */
+export function estimateSkewFromInk(
+  xs: ArrayLike<number>, ys: ArrayLike<number>, ws: ArrayLike<number>,
+  w: number, h: number, opts?: DeskewOptions
+): { angle: number; score: number; baseScore: number }
+
+/** Pure core: edge-energy of the x' projection histogram at rotation a (rad). */
+export function scoreAngle(
+  xs: ArrayLike<number>, ys: ArrayLike<number>, ws: ArrayLike<number>,
+  cx: number, cy: number, aRad: number, nbins: number, span: number
+): number
 
 /**
  * Runs inference on the preprocessed tensor

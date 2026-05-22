@@ -85,6 +85,40 @@ drawDetections(canvas, img, detections)
 console.log('検出された領域:', detections)
 ```
 
+#### 傾き補正（deskew）
+
+縦書きページの傾き（skew）を補正してから推論すると、軸平行ボックスが内容にタイトに収まり、下流の行切り出し・OCR も安定します。`deskew()` は墨を x 軸へ射影したプロファイルのエッジが最も鋭くなる回転角を粗→細探索で推定し、補正済み canvas を返します。返り値の canvas はそのまま `preprocess()` に渡せます。
+
+```javascript
+import { deskew, preprocess, runInference, postprocess } from 'koten-layout-detector'
+
+// 1) ページ全体を deskew → 補正済み canvas を得る
+const { canvas: straight, angle } = deskew(img)   // angle[deg], |angle|<0.3 のときは無補正で img を返す
+console.log('推定傾き', angle, '度')
+
+// 2) 補正済み canvas を通常どおり推論（検出座標は補正後の座標系）
+const { tensor, meta } = preprocess(straight)
+const out = await runInference(session, tensor)
+const detections = postprocess(out, meta, 0.5, 0.45)
+```
+
+精度を上げたい場合は、いったん検出して本文領域（手書き/活字/全体）を求め、その領域だけで角度推定 → ページを補正 → 必要なら再検出、という流れも使えます（余白・図版・印を推定から除外できる）：
+
+```javascript
+// 先に1回検出して本文領域を取得
+const pre1 = preprocess(img)
+const first = postprocess(await runInference(session, pre1.tensor), pre1.meta)
+const body = first.find(d => d.label === '手書き' || d.label === '活字' || d.label === '全体')
+
+// その領域で傾き推定 → ページ補正 → 再検出
+const angle = estimateSkewAngle(img, { region: body })
+const straight = deskewImage(img, angle)
+const pre2 = preprocess(straight)
+const detections = postprocess(await runInference(session, pre2.tensor), pre2.meta)
+```
+
+> 注: 補正後の検出座標は「補正済み画像」の座標系です。元画像座標へ戻すには、回転中心まわりに `-angle` の逆回転を適用してください。OCR など下流も補正後画像で処理する場合は変換不要です。
+
 #### TypeScript
 
 TypeScriptで使用する場合、完全な型定義が利用できます：
